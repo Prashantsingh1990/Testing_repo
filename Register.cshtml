@@ -1,0 +1,431 @@
+﻿@using Extraback.Core.Entities
+@model VerifierMaster
+@{
+    ViewBag.Title = "www.getsworld.com - Register Verifier";
+    <title>www.getsworld.com-Register Verifier</title>
+
+    <meta charset="utf-8" />
+
+    <meta name="fb_admins_meta_tag" content="thegetsworld" />
+    <meta name="keywords" content="Assessment, English Language, English exams, English langauge assessment, English language exams, English test services, Test, GETS-HE, GETS-HE World Verifier register" />
+    <meta name="description" content="Global English Testing Services - GETS. 21st Century English langauge assessment and tests. International English test and assessment" />
+    <meta name="author" content="GETS-HE World">
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+<style>
+    .subheader {
+        font-weight: bold;
+        color: black;
+        font-size: 12px;
+        text-align: left;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        padding-left: 10px;
+        border: solid 1px #b6b6b6;
+        background-color: #E5DDC8;
+        margin-bottom: 10px;
+    }
+</style>
+
+@using (Html.BeginForm("Register", "Verifier", FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal formouter", role = "form" }))
+{
+    string menuid = Request.QueryString["menuid"];
+    <input id="menuid" name="menuid" value="@menuid" type="hidden" />
+    var emailpat = @"^[A-Za-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?";
+    var webPattern = @"([\w-]+\.)+[\w-]+[.com]+(/[/?%&=]*)?";
+    var usernamepatt = @"^({6,25})$";
+
+
+    <input type="hidden" id="btnTitle" value="@Model.VerifierTitle" />
+    <input type="hidden" id="btnCountryID" value="@Model.CountryID" />
+    <input type="hidden" id="btnGender" value="@Model.Gender" />
+
+
+
+
+
+
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Register Verifier</div>
+        <div class="panel-body">
+
+
+
+
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <div class='alertBox successMessage'><span>Message: </span>@ViewBag.Message</div>
+                <br />
+            }
+            @if (!string.IsNullOrEmpty(ViewBag.errorMessage))
+            {
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.Partial("_errorMessage")
+                        <br />
+                    </div>
+                </div>
+            }
+
+            <div class="form-group">
+                <label class="col-md-3">
+                    User Name
+                </label>
+                <div class="col-md-9">
+                    <input id="txtUserName" class="form-control" type="text" value="@Model.PrefUsername" placeholder="User Name" name="PrefUsername" maxlength="50"
+                           @*data-val-required="Please specify user name." data-val="true"*@
+                           data-val-regex-pattern="@usernamepatt" data-val-regex="please provide valid user name"
+                           data-val-length="User name should be 6 characters long." data-val-length-min="6" />
+
+                    <span class="field-validation-error" data-valmsg-replace="true" data-valmsg-for="PrefUsername">
+                    </span>
+                    <span id="dvUserNameStatus"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-md-3">
+                    Organisation Name<sup>*</sup>
+                </label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" id="InstituteName" name="InstituteName" value="@Model.InstituteName"
+                           maxlength="150" placeholder="Organisation Name" data-val="true" data-val-required="Please specify organisation name." />
+                    <span class="field-validation-valid" data-valmsg-for="InstituteName" data-valmsg-replace="true">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">
+                    Address<sup>*</sup>
+                </label>
+                <div class="col-md-9">
+                    <input id="Address1" class="form-control" name="Address1" type="text" value="@Model.Address1" maxlength="250" placeholder="Address" data-val="true" data-val-required="Please specify address." />
+                    <span class="field-validation-valid" data-valmsg-for="Address1" data-valmsg-replace="true">
+                    </span>
+                    <br />
+                    <input id="txtAddress2" class="form-control" name="Address2" type="text" value="@Model.Address2" maxlength="150" placeholder="Address" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">
+                    City<sup>*</sup>
+                </label>
+                <div class="col-md-9">
+                    <input id="txtCity" class="form-control" name="City" type="text" value="@Model.City" maxlength="50" placeholder="City" data-val="true" data-val-required="Please specify city." />
+                    <span class="field-validation-valid" data-valmsg-for="City" data-valmsg-replace="true">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">
+                    State
+                </label>
+                <div class="col-md-9">
+                    <input id="txtState" class="form-control" name="State" type="text" value="@Model.State" maxlength="50" placeholder="State" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">
+                    Select Country<sup>*</sup>
+                </label>
+                <div class="col-sm-9">
+                    <select id="ddlCountry" name="CountryID" class="form-control" data-val-number="Please select country"
+                            data-val="true"></select>
+                    <span class="field-validation-valid" data-valmsg-replace="true" data-valmsg-for="CountryID">
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3">
+                    Zip / Pin Code<sup>*</sup>
+                </label>
+                <div class="col-md-9">
+                    <input id="PinCode" class="form-control" type="text" maxlength="10" value="@Model.PinCode"
+                           placeholder="Zip / Pin Code" name="PinCode" data-val="true" data-val-required="Please specify  zip / pin Code." />
+                    <span class="field-validation-error" data-valmsg-replace="true" data-valmsg-for="PinCode">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">
+                    Email ID<sup>*</sup>
+                </label>
+                <div class="col-md-9">
+                    <input id="EmailID" class="form-control" type="text" value="@Model.EmailID"
+                           placeholder="Enter Email Id" name="EmailID" data-val-required="Please specify email id."
+                           data-val-regex="Please provide valid email." data-val-regex-pattern="@emailpat" data-val="true" />
+                    <span id="dvEmailStatus"></span>
+                    <span class="field-validation-error" data-valmsg-replace="true" data-valmsg-for="EmailID">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">
+                    Tel. No.
+                </label>
+                <div class="col-md-9">
+                    <img alt="" style="vertical-align: baseline; float: left; width:35px" src="@Href("~/Content/Images/ccode.jpg")" />
+                    <input id="TelNumber" class="form-control" type="text" value="@Model.TelNumber"
+                           min="15" maxlength="15" style="width: 250px;" placeholder="Tel. Number" name="TelNumber" data-val-regex-pattern="^[0-9]\d{5,14}$" data-val-regex="Please enter valid tel. no."
+                           data-val="true" />
+                    <span class="field-validation-error" data-valmsg-replace="true" data-valmsg-for="TelNumber">
+                    </span>
+                    <div style="float:left; margin-left:-35px; ">
+                        (<span style="color: Red; font-size: 12px;">Note : </span><span style="font-size: 12px;">
+                            Telephone no. preceding with STD code e.g. 011
+                        </span>)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">
+                    Website
+                </label>
+                <div class="col-md-9">
+                    @*<div class="col-md-1 v-align">
+
+                        </div>
+                        <div class="col-md-8">*@
+                    <input id="txtWebsite" class="form-control" type="text" placeholder="Website" name="Website" value="@Model.Website"
+                           data-val-regex="Please provide valid web address." data-val-regex-pattern="@webPattern" data-val="true" />
+                    <span class="field-validation-error" data-valmsg-replace="true" data-valmsg-for="Website">
+                    </span>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="panel-heading subhead">Contact Person Information</div>
+        <div class="panel-body">
+
+            <div class="form-group">
+                <label class="col-sm-3">
+                    Select Title<sup>*</sup>
+                </label>
+                <div class="col-md-9">
+                    <select id="ddlTitle" class="form-control" name="VerifierTitle" data-val-number="Please select title."
+                            data-val="true" style="width:150px;">
+                        <option>-Please Select-</option>
+                        <option value="1">Mr.</option>
+                        <option value="2">Mrs.</option>
+                        <option value="3">Ms.</option>
+                        <option value="4">Proff.</option>
+                        <option value="5">Dr</option>
+                        <option value="6">Md.</option>
+                    </select>
+                    <span class="field-validation-valid" data-valmsg-replace="true" data-valmsg-for="VerifierTitle">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">
+                    Given Name<sup>*</sup>
+                </label>
+                <div class="col-md-9">
+                    <input id="GivenName" class="form-control" name="GivenName" type="text" maxlength="150" placeholder="Given Name" data-val="true" data-val-required="Please specify Given name." value="@Model.GivenName" />
+                    <span class="field-validation-valid" data-valmsg-replace="true" data-valmsg-for="GivenName">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">
+                    Family Name
+                </label>
+                <div class="col-md-9">
+                    <input id="FamilyName" class="form-control" name="FamilyName" type="text" maxlength="150" placeholder="Family Name" value="@Model.FamilyName" />
+                    <span class="field-validation-valid" data-valmsg-replace="true" data-valmsg-for="FamilyName">
+                    </span>
+                </div>
+            </div>
+            @*  <div class="form-group">
+                    <label class="col-md-3">
+                        Preferred User Name<sup>*</sup>
+                    </label>
+                    <div class="col-md-9">
+                        <input id="txtUserName" class="form-control" type="text" value="@Model.PrefUsername" placeholder=" enter user name" name="PrefUsername" maxlength="50"
+                               data-val-required="Please specify preferred user name." data-val="true"
+                               data-val-regex-pattern="@usernamepatt" data-val-regex="please provide valid user name"
+                               data-val-length="User name should be 6 characters long." data-val-length-min="6" />
+                        (<span style="color: Red; font-size: 12px;">Note : </span><span style="font-size: 12px;">
+                            Please use only alphabets and numbers
+                        </span>)
+
+                        <span class="field-validation-error" data-valmsg-replace="true" data-valmsg-for="PrefUsername">
+                        </span>
+                        <span id="dvUserNameStatus"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-3">
+                        Gender<sup>*</sup>
+                    </label>
+
+                    <div class="col-md-9">
+                        <select id="ddlGender" class="form-control" name="Gender" data-val-number="Please select gender."
+                                data-val="true" style="width:150px;">
+                            <option>-Please Select-</option>
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+
+                        </select>
+                        <span class="field-validation-valid" data-valmsg-replace="true" data-valmsg-for="Gender">
+                        </span>
+                    </div>
+                </div>*@
+
+
+
+
+           
+
+            <div class="form-group">
+                <label class="col-md-3">
+                    Mobile No.<sup>*</sup>
+                </label>
+                <div class="col-md-9">
+                    <img alt="" style="vertical-align: baseline; float: left; width:35px" src="@Href("~/Content/Images/ccode.jpg")" />
+                    <input id="MobileNo" class="form-control" type="text" value="@Model.MobileNo"
+                           maxlength="14" style="width: 250px;" placeholder="Mobile Number" name="MobileNo"
+                           data-val="true" data-val-required="Please specify mobile no."
+                           data-val-regex-pattern="^[0-9]\d{5,14}$" data-val-regex="Please enter valid mobile no." />
+                    <span class="field-validation-error" data-valmsg-replace="true" data-valmsg-for="MobileNo">
+                    </span>
+                    <div style="float:left; margin-left:-35px; ">
+                        (<span style="color: Red; font-size: 12px; text-align:left">Note : </span><span style="font-size: 12px;">
+                            Mobile no. preceding with country code e.g. 91
+                        </span>)
+                    </div>
+                </div>
+            </div>
+           
+            @if (string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <div class="form-group">
+                    <label class="col-md-4 control-label">
+                        &nbsp;
+                    </label>
+                    <div class="col-md-8 text-left">
+                        <input type="submit" class="btn btn-primary btn-lg" value="Submit" />
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+}
+<script type="text/javascript">
+
+
+
+
+    $(function () {
+        var stkid = $("#btnCountryID").val();
+        $.getJSON('@Url.Action("GetAllCountries", "ControlPanel")', function (result) {
+            var ddl = $('#ddlCountry');
+            ddl.empty();
+            ddl.append('<option>-- Please Select --</option>');
+            $(result).each(function () {
+                if (stkid == this.Value) {
+                    ddl.append(
+                    $('<option/>',
+                     {
+                         value: this.Value, selected: true
+                     }).html(this.Text)
+                  );
+                }
+                else {
+                    ddl.append(
+                    $('<option/>',
+                     {
+                         value: this.Value
+                     }).html(this.Text)
+                  );
+                }
+            });
+        });
+    });
+    $(function () {
+
+        var btnTitle = $("#btnTitle").val();
+        if (btnTitle != "") {
+            var titleLen = $("#btnTitle").val().length;
+            if (titleLen > 1) {
+                $("#ddlTitle option").each(function () {
+
+                    if ($(this).html() == btnTitle)
+                        $(this).attr("selected", "selected");
+                });
+            }
+            else {
+                $("#ddlTitle option").each(function () {
+
+                    if ($(this).val() == btnTitle)
+                        $(this).attr("selected", "selected");
+                });
+            }
+
+        }
+
+
+        //var btnGender = $("#btnGender").val();
+
+        //$("#ddlGender option").each(function () {
+        //    if ($(this).val() == btnGender)
+        //        $(this).attr("selected", "selected");
+        //});
+    });
+
+
+    ////Check UserName
+    var isValid = false;
+    function UserNameCheck() {
+        if ($('#txtUserName').valid()) {
+            $.ajax({
+                type: 'GET',
+                //url: '~/Account/ValidateUserName',
+                url: '@Url.Action("ValidateUserName", "Account")',
+                data: { userName: $('#txtUserName').val() },
+                cache: false,
+                beforeSend: function () {
+                    $('#dvUserNameStatus').html('<img src=@Href("~/Content/Images/processing.gif") alt="" style="width:15px;"/>');
+                },
+                success: function (data) {
+                    if (data.status == "success") {
+                        $('#dvUserNameStatus').html('<img src=@Href("~/Content/Images/correct.jpg") alt="" style="width:15px;"/><span style="color:Green">User-Name is available.</span>');
+                        isValid = true;
+                    }
+                    else {
+                        $('#dvUserNameStatus').html('<img src=@Href("~/Content/Images/wrong.jpg") alt="" style="width:15px;"/><span style="color:red">User-Name already Exist.</span>');
+                        isValid = false;
+                        document.getElementById("txtUserName").value = "";
+                    }
+                },
+                complete: function () { }
+            });
+        }
+        else {
+            $('#dvUserNameStatus').html('<img src=@Href("~/Content/Images/wrong.jpg") alt=""/>');
+        }
+    }
+    $('#txtUserName').focusout(function () {
+        $('#dvUserNameStatus').empty();
+        if ($('#txtUserName').val() != "") {
+            UserNameCheck();
+        }
+    });
+
+
+</script>
